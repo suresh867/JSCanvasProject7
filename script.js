@@ -18,6 +18,7 @@ window.addEventListener('load', function(){
         player.draw(ctx);
         drawStatusText(ctx, input);
         requestAnimationFrame(animate);
+        console.log("hello world!")
     }
     animate();
 })
