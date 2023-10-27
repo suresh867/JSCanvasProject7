@@ -1,12 +1,13 @@
 import {StandingLeft, StandingRight, SittingLeft, SittingRight, RunningLeft, RunningRight,
-JumpingLeft, JumpingRight} from './state.js';
+JumpingLeft, JumpingRight, FallingLeft, FallingRight} from './state.js';
 
 export default class Player{
     constructor(gameWidth, gameHeight){
         this.gameWidth = gameWidth;
         this.gameHeight = gameHeight;
         this.states = [new StandingLeft(this), new StandingRight(this), new SittingLeft(this), new SittingRight(this),
-        new RunningLeft(this), new RunningRight(this), new JumpingLeft(this), new JumpingRight(this)];
+        new RunningLeft(this), new RunningRight(this), new JumpingLeft(this), new JumpingRight(this),
+        new FallingLeft(this), new FallingRight(this)];
         this.currentState = this.states[0];
         this.image = document.getElementById('dogImage');
         this.width = 200;
@@ -17,11 +18,23 @@ export default class Player{
         this.gravity = 0.5;
         this.frameX = 0;
         this.frameY = 0;
+        this.maxFrame = 6;
         this.speed = 0;
         this.maxSpeed = 10;
+        this.fps = 30;
+        this.frameTimer = 0;
+        this.frameInterval = 1000/this.fps
     }
-    draw(context){
-        // context.strokeRect(this.x, this.y, this.width,this.height);
+    draw(context, deltaTime){
+        if(this.frameTimer > this.frameInterval){
+            if(this.frameX < this.maxFrame) this.frameX++;
+            else this.frameX = 0;
+            this.frameTimer = 0;
+        } else{
+            this.frameTimer += deltaTime;
+        }
+
+      
         context.drawImage(this.image, 
             this.width * this.frameX, this.height * this.frameY,  this.width, this.height,
             this.x, this.y, this.width, this.height);
